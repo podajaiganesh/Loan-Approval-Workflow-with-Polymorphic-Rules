@@ -16,6 +16,10 @@ public class Main {
             System.out.print("Enter loan type (PERSONAL / HOME / BUSINESS): ");
             String loanType = sc.nextLine().trim().toUpperCase();
 
+            if (!loanType.equals("PERSONAL") && !loanType.equals("HOME") && !loanType.equals("BUSINESS")) {
+                throw new InvalidLoanApplicationException("Loan type must be PERSONAL, HOME, or BUSINESS.");
+            }
+
             System.out.print("Enter monthly income: ");
             double income = sc.nextDouble();
 
