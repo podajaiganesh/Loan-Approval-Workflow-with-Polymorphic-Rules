@@ -23,6 +23,10 @@ public class Main {
                 throw new InvalidLoanApplicationException("Loan type must be PERSONAL, HOME, or BUSINESS.");
             }
 
+            if (!loanType.equals("PERSONAL") && !loanType.equals("HOME") && !loanType.equals("BUSINESS")) {
+                throw new InvalidLoanApplicationException("Loan type must be PERSONAL, HOME, or BUSINESS.");
+            }
+
             System.out.print("Enter monthly income: ");
             double income = sc.nextDouble();
             if (income < 0) {
