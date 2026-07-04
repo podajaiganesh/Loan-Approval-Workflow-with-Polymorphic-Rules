@@ -10,26 +10,48 @@ public class Main {
 
         try {
             System.out.println("=== Loan Approval System ===");
+
             System.out.print("Enter applicant name: ");
             String name = sc.nextLine();
+            if (name == null || name.trim().isEmpty()) {
+                throw new InvalidLoanApplicationException("Applicant name cannot be empty.");
+            }
 
             System.out.print("Enter loan type (PERSONAL / HOME / BUSINESS): ");
             String loanType = sc.nextLine().trim().toUpperCase();
+            if (!loanType.equals("PERSONAL") && !loanType.equals("HOME") && !loanType.equals("BUSINESS")) {
+                throw new InvalidLoanApplicationException("Loan type must be PERSONAL, HOME, or BUSINESS.");
+            }
 
             System.out.print("Enter monthly income: ");
             double income = sc.nextDouble();
+            if (income < 0) {
+                throw new InvalidLoanApplicationException("Income cannot be negative.");
+            }
 
             System.out.print("Enter existing EMI: ");
             double existingEMI = sc.nextDouble();
+            if (existingEMI < 0) {
+                throw new InvalidLoanApplicationException("Existing EMI cannot be negative.");
+            }
 
             System.out.print("Enter loan amount requested: ");
             double loanAmount = sc.nextDouble();
+            if (loanAmount <= 0) {
+                throw new InvalidLoanApplicationException("Loan amount must be greater than zero.");
+            }
 
             System.out.print("Enter tenure (years): ");
             int tenure = sc.nextInt();
+            if (tenure <= 0) {
+                throw new InvalidLoanApplicationException("Tenure must be greater than zero.");
+            }
 
             System.out.print("Enter credit score: ");
             int creditScore = sc.nextInt();
+            if (creditScore < 300 || creditScore > 900) {
+                throw new InvalidLoanApplicationException("Credit score must be between 300 and 900.");
+            }
 
             double propertyValue = 0;
             double businessTurnover = 0;
@@ -37,12 +59,16 @@ public class Main {
             if (loanType.equals("HOME")) {
                 System.out.print("Enter property value: ");
                 propertyValue = sc.nextDouble();
+                if (propertyValue <= 0) {
+                    throw new InvalidLoanApplicationException("Property value must be greater than zero.");
+                }
             } else if (loanType.equals("BUSINESS")) {
                 System.out.print("Enter business annual turnover: ");
                 businessTurnover = sc.nextDouble();
+                if (businessTurnover < 0) {
+                    throw new InvalidLoanApplicationException("Business turnover cannot be negative.");
+                }
             }
-
-            validate(name, loanType, income, loanAmount, tenure, creditScore);
 
             LoanApplication application = new LoanApplication(
                     name, loanType, income, existingEMI, loanAmount, tenure,
@@ -54,33 +80,9 @@ public class Main {
         } catch (InputMismatchException e) {
             System.out.println("\nInvalid input: please enter numbers where numbers are expected.");
         } catch (InvalidLoanApplicationException e) {
-            System.out.println("\nApplication rejected before evaluation: " + e.getMessage());
+            System.out.println("\nInvalid entry: " + e.getMessage());
         } finally {
             sc.close();
-        }
-    }
-
-    private static void validate(String name, String loanType, double income,
-                                  double loanAmount, int tenure, int creditScore)
-            throws InvalidLoanApplicationException {
-
-        if (name == null || name.trim().isEmpty()) {
-            throw new InvalidLoanApplicationException("Applicant name cannot be empty.");
-        }
-        if (!loanType.equals("PERSONAL") && !loanType.equals("HOME") && !loanType.equals("BUSINESS")) {
-            throw new InvalidLoanApplicationException("Loan type must be PERSONAL, HOME, or BUSINESS.");
-        }
-        if (income < 0) {
-            throw new InvalidLoanApplicationException("Income cannot be negative.");
-        }
-        if (loanAmount <= 0) {
-            throw new InvalidLoanApplicationException("Loan amount must be greater than zero.");
-        }
-        if (tenure <= 0) {
-            throw new InvalidLoanApplicationException("Tenure must be greater than zero.");
-        }
-        if (creditScore < 300 || creditScore > 900) {
-            throw new InvalidLoanApplicationException("Credit score must be between 300 and 900.");
         }
     }
 }
